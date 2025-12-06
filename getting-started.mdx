@@ -1,0 +1,143 @@
+---
+title: Getting Started
+description: Step-by-step guide to setting up and using AGUSTIN ORTEGA Documentation
+---
+
+## Setting Up Your Account
+
+You create your AGUSTIN ORTEGA account to access all documentation features. The registration process takes just a few minutes and gives you immediate access to create your first documentation space.
+
+<Steps>
+  <Step title="Create Account" icon="user">
+    Visit the AGUSTIN ORTEGA website and click "Sign Up". Provide your email address and choose a secure password. Verify your email to activate your account.
+  </Step>
+  <Step title="Verify Email" icon="mail">
+    Check your inbox for a verification email from AGUSTIN ORTEGA. Click the verification link to confirm your account and log in.
+  </Step>
+  <Step title="Set Up Profile" icon="settings">
+    Complete your profile with your name, organization details, and preferences. This helps customize your documentation experience.
+  </Step>
+</Steps>
+
+## Creating Your First Documentation Space
+
+You establish your initial documentation space to organize your project knowledge. Choose a meaningful name and configure basic settings to match your team's needs.
+
+<Tabs>
+  <Tab title="Web Interface" icon="monitor">
+    Use the web dashboard to create your space. Navigate to "Spaces" in the sidebar, click "Create New Space", and fill in the required details.
+
+    <CodeGroup tabs="JavaScript,Python">
+      ```javascript
+      // Example: Create space via API
+      const response = await fetch('/api/spaces', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: 'My Project Docs',
+          description: 'Documentation for project X',
+          visibility: 'private'
+        })
+      });
+      const space = await response.json();
+      console.log('Space created:', space.id);
+      ```
+      ```python
+      import requests
+
+      # Create documentation space
+      space_data = {
+        'name': 'My Project Docs',
+        'description': 'Documentation for project X',
+        'visibility': 'private'
+      }
+      response = requests.post('/api/spaces', json=space_data)
+      space = response.json()
+      print(f'Space created: {space["id"]}')
+      ```
+    </CodeGroup>
+  </Tab>
+  <Tab title="Command Line" icon="terminal">
+    Use the AGUSTIN ORTEGA CLI for programmatic space creation. Install the CLI first, then run commands to set up your environment.
+
+    ```bash
+    # Install CLI
+    npm install -g agustin-ortega-cli
+    
+    # Login and create space
+    agustin login
+    agustin spaces create --name "My Project Docs" --description "Documentation for project X"
+    ```
+  </Tab>
+</Tabs>
+
+## Importing Existing Documentation
+
+You bring your current documentation into AGUSTIN ORTEGA using our import tools. Support for multiple formats ensures you can migrate your knowledge base seamlessly.
+
+<Expandable title="Supported Import Formats" default-open="false">
+  | Format | Description | File Extensions |
+  |--------|-------------|-----------------|
+  | Markdown | Standard markdown files | `.md`, `.markdown` |
+  | HTML | Web pages and documentation | `.html`, `.htm` |
+  | Confluence | Atlassian Confluence exports | `.xml` |
+  | GitBook | GitBook JSON exports | `.json` |
+</Expandable>
+
+<Steps>
+  <Step title="Prepare Files" icon="file-text">
+    Organize your documentation files into a clear folder structure. Ensure filenames are descriptive and follow consistent naming conventions.
+  </Step>
+  <Step title="Upload Content" icon="upload">
+    Use the bulk upload feature in your space settings. Drag and drop files or select folders to import your entire documentation library.
+  </Step>
+  <Step title="Review and Edit" icon="edit">
+    After import, review the converted content. Make adjustments to formatting, links, and structure as needed.
+  </Step>
+</Steps>
+
+## Inviting Team Members
+
+You add collaborators to your documentation spaces to enable team collaboration. Control access levels and permissions to maintain security while fostering productivity.
+
+<Callout kind="info">Grant appropriate permissions based on team roles. Use read-only access for external stakeholders and full edit permissions for core contributors.</Callout>
+
+<Tabs>
+  <Tab title="Individual Invites" icon="user">
+    Send personalized invitations to specific team members. Include a custom message explaining their role and access level.
+  </Tab>
+  <Tab title="Bulk Invites" icon="users">
+    Import team members from CSV files or integrate with your identity provider. Set default permissions for large groups.
+  </Tab>
+  <Tab title="Public Access" icon="globe">
+    Enable public read access for open-source projects or community documentation. Control what content is visible to external visitors.
+  </Tab>
+</Tabs>
+
+## Configuring Your Space
+
+You customize your documentation space to match your workflow and branding. Adjust settings for appearance, behavior, and integrations.
+
+<Columns cols={2}>
+  <Card title="Branding" icon="palette" href="#branding">
+    Customize colors, logos, and themes to match your organization. Create a consistent look across all documentation spaces.
+  </Card>
+  <Card title="Workflows" icon="git-branch" href="#workflows">
+    Set up approval processes and review workflows. Ensure documentation quality through automated checks and team reviews.
+  </Card>
+</Columns>
+
+<ExpandableGroup>
+  <Expandable title="Common Configuration Questions" default-open="false">
+    <Expandable title="How do I change the space theme?" default-open="false">
+      Go to Space Settings > Appearance and select from predefined themes or create a custom color scheme.
+    </Expandable>
+    <Expandable title="Can I set up automatic backups?" default-open="false">
+      Yes, enable automatic backups in Space Settings > Security. Choose daily, weekly, or custom backup schedules.
+    </Expandable>
+  </Expandable>
+</ExpandableGroup>
+
+## Next Steps
+
+With your documentation space set up, you explore advanced features like API integrations and custom workflows. Continue reading our guides or reach out to support for assistance.

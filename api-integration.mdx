@@ -1,0 +1,276 @@
+---
+title: API Integration
+description: Guide to integrating with AGUSTIN ORTEGA Documentation APIs for automation and customization
+---
+
+## API Overview
+
+You integrate AGUSTIN ORTEGA Documentation into your workflows using our comprehensive REST API. The API supports all major documentation operations and provides programmatic access to your spaces.
+
+<Columns cols={2}>
+  <Card title="Authentication" icon="key" href="#authentication">
+    Secure your API requests with proper authentication methods and token management.
+  </Card>
+  <Card title="Core Endpoints" icon="terminal" href="#core-endpoints">
+    Access fundamental documentation operations through our primary API endpoints.
+  </Card>
+</Columns>
+
+## Authentication Methods
+
+You authenticate API requests using multiple secure methods. Choose the approach that best fits your application's security requirements.
+
+<Tabs>
+  <Tab title="API Keys" icon="key">
+    Use API keys for server-to-server communication. Generate keys in your account settings and include them in request headers.
+
+    ```javascript
+    // Example API key authentication
+    const headers = {
+      'Authorization': 'Bearer your-api-key-here',
+      'Content-Type': 'application/json'
+    };
+    
+    const response = await fetch('/api/spaces', { headers });
+    const spaces = await response.json();
+    ```
+  </Tab>
+  <Tab title="OAuth 2.0" icon="lock">
+    Implement OAuth 2.0 for user-authorized access. Perfect for applications that need to act on behalf of users.
+
+    ```javascript
+    // OAuth flow example
+    const oauthConfig = {
+      clientId: 'your-client-id',
+      clientSecret: 'your-client-secret',
+      redirectUri: 'https://yourapp.com/callback'
+    };
+    
+    // Redirect user to authorization URL
+    window.location.href = `/oauth/authorize?client_id=${oauthConfig.clientId}&redirect_uri=${oauthConfig.redirectUri}`;
+    ```
+  </Tab>
+  <Tab title="Personal Tokens" icon="user">
+    Create personal access tokens for development and testing. Manage tokens in your user profile settings.
+  </Tab>
+</Tabs>
+
+<Callout kind="info">Always use HTTPS for API requests and never expose API keys in client-side code. Rotate keys regularly for security.</Callout>
+
+## Working with Spaces
+
+You manage documentation spaces programmatically through dedicated API endpoints. Create, update, and organize spaces to match your project structure.
+
+<Steps>
+  <Step title="List Spaces" icon="list">
+    Retrieve all spaces you have access to. Use pagination for large collections.
+
+    ```javascript
+    const response = await fetch('/api/spaces?page=1&limit=20');
+    const data = await response.json();
+    console.log('Spaces:', data.spaces);
+    ```
+  </Step>
+  <Step title="Create Space" icon="plus">
+    Set up new documentation spaces with custom settings and permissions.
+
+    ```javascript
+    const newSpace = {
+      name: 'API Documentation',
+      description: 'Technical documentation for our APIs',
+      visibility: 'organization',
+      settings: {
+        allowPublicRead: false,
+        requireApproval: true
+      }
+    };
+    
+    const response = await fetch('/api/spaces', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer token' },
+      body: JSON.stringify(newSpace)
+    });
+    ```
+  </Step>
+  <Step title="Update Settings" icon="settings">
+    Modify space configurations and preferences through API calls.
+  </Step>
+</Steps>
+
+## Document Management
+
+You handle document operations using comprehensive API methods. Create, read, update, and organize documentation content programmatically.
+
+<CodeGroup tabs="Create Document,Update Content,Search Documents">
+  ```javascript
+  // Create a new document
+  const document = {
+    title: 'API Reference',
+    content: '# API Endpoints\n\nThis document covers our API endpoints...',
+    spaceId: 'space-123',
+    tags: ['api', 'reference'],
+    metadata: {
+      author: 'Dev Team',
+      version: '1.0'
+    }
+  };
+  
+  const response = await fetch('/api/documents', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer token'
+    },
+    body: JSON.stringify(document)
+  });
+  ```
+  ```javascript
+  // Update document content
+  const updates = {
+    content: '# Updated API Reference\n\nNew endpoint information...',
+    version: '1.1',
+    changelog: 'Added new authentication methods'
+  };
+  
+  await fetch('/api/documents/doc-456', {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer token'
+    },
+    body: JSON.stringify(updates)
+  });
+  ```
+  ```javascript
+  // Search documents
+  const searchParams = new URLSearchParams({
+    query: 'authentication',
+    spaceId: 'space-123',
+    tags: 'api,security',
+    limit: 10
+  });
+  
+  const response = await fetch(`/api/documents/search?${searchParams}`);
+  const results = await response.json();
+  console.log('Search results:', results.documents);
+  ```
+</CodeGroup>
+
+## Webhooks and Real-time Updates
+
+You receive instant notifications about documentation changes using webhooks. Set up endpoints to handle events and keep your systems synchronized.
+
+<Expandable title="Available Webhook Events" default-open="false">
+  | Event Type | Description | Payload |
+  |------------|-------------|---------|
+  | document.created | New document added | Document details and metadata |
+  | document.updated | Content modified | Changes and version info |
+  | document.deleted | Document removed | Document ID and deletion info |
+  | space.settings_changed | Space configuration updated | New settings and user info |
+  | user.access_granted | User permissions changed | User and permission details |
+</Expandable>
+
+<Steps>
+  <Step title="Register Webhook" icon="webhook">
+    Configure webhook endpoints in your space settings or via API.
+
+    ```javascript
+    const webhook = {
+      url: 'https://yourapp.com/webhooks/docs',
+      secret: 'your-webhook-secret',
+      events: ['document.created', 'document.updated'],
+      active: true
+    };
+    
+    await fetch('/api/webhooks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(webhook)
+    });
+    ```
+  </Step>
+  <Step title="Handle Events" icon="code">
+    Process incoming webhook payloads in your application.
+  </Step>
+  <Step title="Secure Delivery" icon="shield">
+    Verify webhook signatures to ensure message authenticity.
+  </Step>
+</Steps>
+
+## Rate Limiting and Best Practices
+
+You follow API best practices to ensure reliable integration and avoid rate limiting issues. Implement proper error handling and retry logic.
+
+<Callout kind="alert">API requests are rate limited. Monitor your usage and implement exponential backoff for retries.</Callout>
+
+<ExpandableGroup>
+  <Expandable title="Rate Limits" default-open="false">
+    Standard API plans include 1000 requests per hour. Enterprise plans offer higher limits and dedicated support.
+  </Expandable>
+  <Expandable title="Error Handling" default-open="false">
+    Handle HTTP status codes appropriately. Implement retry logic for 429 (rate limited) and 5xx server errors.
+  </Expandable>
+  <Expandable title="Caching Strategies" default-open="false">
+    Cache API responses to reduce request volume. Use ETags and conditional requests for efficient updates.
+  </Expandable>
+</ExpandableGroup>
+
+## SDKs and Libraries
+
+You accelerate development using our official SDKs and community libraries. Choose from multiple programming languages and frameworks.
+
+<Tabs>
+  <Tab title="JavaScript/Node.js" icon="code">
+    ```bash
+    npm install agustin-ortega-sdk
+    
+    const { AgustinOrtega } = require('agustin-ortega-sdk');
+    const client = new AgustinOrtega({ apiKey: 'your-key' });
+    ```
+  </Tab>
+  <Tab title="Python" icon="code">
+    ```bash
+    pip install agustin-ortega-python
+    
+    from agustin_ortega import Client
+    client = Client(api_key='your-key')
+    ```
+  </Tab>
+  <Tab title="Go" icon="code">
+    ```bash
+    go get github.com/agustin-ortega/go-sdk
+    
+    import "github.com/agustin-ortega/go-sdk"
+    client := agustinortega.NewClient("your-key")
+    ```
+  </Tab>
+</Tabs>
+
+## Migration and Data Import
+
+You migrate existing documentation using our bulk import APIs. Transfer content from other platforms while preserving structure and metadata.
+
+<Steps>
+  <Step title="Prepare Data" icon="file-text">
+    Format your existing documentation for import. Convert to supported formats and organize by space structure.
+  </Step>
+  <Step title="Use Import API" icon="upload">
+    Submit bulk import requests with your prepared data. Monitor progress through status endpoints.
+  </Step>
+  <Step title="Validate Results" icon="check-circle">
+    Verify imported content and fix any conversion issues. Update links and references as needed.
+  </Step>
+</Steps>
+
+## Troubleshooting API Issues
+
+You diagnose and resolve common API integration problems. Use our debugging tools and comprehensive error messages.
+
+<Expandable title="Common API Errors" default-open="false">
+  - **401 Unauthorized**: Check API key validity and permissions
+  - **403 Forbidden**: Verify user roles and space access
+  - **429 Too Many Requests**: Implement rate limiting and backoff
+  - **500 Internal Error**: Report to support with request details
+</Expandable>
+
+For additional help, consult our API reference documentation or contact developer support.
